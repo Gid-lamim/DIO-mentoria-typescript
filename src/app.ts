@@ -1,45 +1,48 @@
+// O código abaixo tem alguns erros e não funciona como deveria. Você pode identificar quais são e corrigi-los em um arquivo TS?
 
+let botaoAtualizar = document.getElementById('addBtn')!;
+let botaoLimpar = document.getElementById('clearBtn') ;
+let campoSaldo = document.getElementById('saldoText') ;
+let inputValor = document.getElementById('campo-valor') as HTMLInputElement;
+let saldoAtual = 0;
 
-// Como podemos melhorar o esse código usando TS? 
-
- interface pessoa {
-    nome: String,
-    idade: Number,
-    profissao: profissão // a profissão será do tipo enum. isso melhora a padronização
-}
-
-//An enum type is a special data type that enables for a variable to be a set of predefined constants. 
-enum profissão {
-    Atriz,
-    Engenheiro,
-    Pintor,
-    Padeiro
-}
-
-let pessoa1: pessoa  = {//pessoa1 criada como um objeto e implementando a interface Pessoa
-    nome: "maria",
-    idade: 29,
-    profissao: profissão.Atriz
-}
-
-let pessoa2: pessoa = {//pessoa2 criada como um objeto e implementando a interface Pessoa
-    nome: "roberto",
-    idade: 19,
-    profissao: profissão.Padeiro
-}
-
-let pessoa3: pessoa = {//pessoa3 implementando a interface Pessoa
-    nome: "laura",
-    idade: 32, //a idade era uma string. Ao implementar a interface, ficou fácil localizar o erro
-    profissao: profissão.Atriz
+//campoSaldo.value = 0   <-- isso não funciona em TS, pois o campo pode não existir.
+if (campoSaldo){
+    campoSaldo.innerHTML = "0";
 };
 
-let pessoa4: pessoa = {//pessoa4 implementando a interface Pessoa
-    nome: "carlos",
-    idade: 19,
-    profissao: profissão.Padeiro
+function limpaCampo(){
+    inputValor.value = "";
+};
+
+function somarAoSaldo(valorInput: number): void {
+    saldoAtual += valorInput;
+    if(campoSaldo){
+        campoSaldo.innerHTML = saldoAtual.toString(); //o  innerHTML pede string, então devo transformar em string primeiro
+    }
+    limpaCampo();
+ }
+
+ function limparSaldo() {
+    if(campoSaldo){
+        campoSaldo.innerHTML = '0';
+    }
+ }
+
+botaoAtualizar.addEventListener('click', function () {
+    somarAoSaldo(Number(inputValor.value)); //devemos transformar em number primeiro
+    console.log(Number(inputValor.value));
+ });
+
+ if(botaoLimpar){
+    botaoLimpar.addEventListener('click', function () {
+        limparSaldo();
+    });
 }
-console.log(`${pessoa1.nome} tem ${pessoa1.idade} e trabalha como ${pessoa1.profissao}`);
-console.log(`${pessoa2.nome} tem ${pessoa2.idade} e trabalha como ${pessoa2.profissao}`);
-console.log(`${pessoa3.nome} tem ${pessoa3.idade} e trabalha como ${pessoa3.profissao}`);
-console.log(`${pessoa4.nome} tem ${pessoa4.idade} e trabalha como ${pessoa4.profissao}`);
+
+// /**
+//     <h4>Valor a ser adicionado: <input id="soma"> </h4>
+//     <button id="atualizar-saldo">Atualizar saldo</button>
+//     <button id="limpar-saldo">Limpar seu saldo</button>
+//     <h1>"Seu saldo é: " <span id="campo-saldo"></span></h1>
+//  */
